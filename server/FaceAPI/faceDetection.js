@@ -72,6 +72,8 @@ const faceDetection = async (imageReques) => {
 
     // return { text, box };
 
+    return results.label;
+
 }
 
 module.exports = faceDetection;
