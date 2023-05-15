@@ -16,6 +16,12 @@ const faceDetection = async (imageReques) => {
     console.log(image)
     const labels = ['Pedro'];
 
+    const fullFaceDescriptions = await faceapi
+        .detectAllFaces(image)
+        .withFaceLandmarks()
+        .withFaceDescriptors();
+
+
     const labeledFaceDescriptors = await Promise.all(
         labels.map(async label => {
             // // fetch image data from urls and convert blob to HTMLImage element
@@ -26,41 +32,55 @@ const faceDetection = async (imageReques) => {
                 const img =  await canvas.loadImage(`images/${label}/1.jpg`);
                 console.log(img)
                 const detections = await faceapi
-                .detectAllFaces(img)
+                .detectSingleFace(img)
                 .withFaceLandmarks()
-                .withFaceDescriptors()
+                .withFaceDescriptor()
 
                 // console.log(detections)
+                descriptions.push(detections.descriptor)
+                
             }
             catch(error) {
                 console.log(error);
             }
 
-        // return await new faceapi.LabeledFaceDescriptors(label, descriptions)
+        return await new faceapi.LabeledFaceDescriptors(label, descriptions)
             
-            // detect the face with the highest score in the image and compute it's landmarks and face descriptor
-            const fullFaceDescription = await faceapi.detectSingleFace(image).withFaceLandmarks().withFaceDescriptor();
+            // // detect the face with the highest score in the image and compute it's landmarks and face descriptor
+            // const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+            // // console.log(fullFaceDescription)
             
-            if (!fullFaceDescription) {
-            throw new Error(`no faces detected for ${label}`);
-            }
-            // console.log(fullFaceDescription)
+            // if (!fullFaceDescription) {
+            //     return "";
+            // }
+            // // console.log(fullFaceDescription)
             
-            const faceDescriptors = [fullFaceDescription.descriptor];
-            return new faceapi.LabeledFaceDescriptors(label, faceDescriptors);
+            // const faceDescriptors = [fullFaceDescription.descriptor];
+            // // console.log(faceDescriptors);
+            // return new faceapi.LabeledFaceDescriptors(label, faceDescriptors);
+            // console.log(labessd)
+            // return descriptions;
         })
     )
 
     const maxDescriptorDistance = 0.6
+    console.log(labeledFaceDescriptors)
+    const detections = await faceapi.detectSingleFace(image).withFaceLandmarks().withFaceDescriptor();
+
     const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
-    console.log(faceMatcher)
+    // console.log(faceMatcher)
 
-    const detections = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors();
+    // console.log(detections)
 
-    const results = faceMatcher.findBestMatch(detections[0].descriptor) // image.map(fd => faceMatcher.findBestMatch(fd.descriptor))
-    
+    // const results = fullFaceDescriptions.map(fd => {
+    //     console.log(fd.descriptor)
+    //     return faceMatcher.findBestMatch(fd.descriptor)
+    // })// image.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+    const results = faceMatcher.findBestMatch(detections.descriptor)
+        console.log("***************************************************************************")
+    console.log(results)
+    console.log("***************************************************************************")
 
-    console.log(results.label)
 
     // let box;
     // let text;
@@ -72,7 +92,7 @@ const faceDetection = async (imageReques) => {
 
     // return { text, box };
 
-    return results.label;
+    // return results.label;
 
 }
 
