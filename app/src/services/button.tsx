@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Buttons, Typography } from "../style/Style"
+import { Buttons, Typography, Column } from "../style/Style"
 
 type StringProps = {
     labelButton: string
@@ -14,6 +14,7 @@ const Button = ({labelButton}: StringProps) =>{
     return(
         <>
         <Link to={'/aplication'}>
+            
             <Buttons onClick={()=>handleClick()}>
                 <Typography>
                 {labelButton}
