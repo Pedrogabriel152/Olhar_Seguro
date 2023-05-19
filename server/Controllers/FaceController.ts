@@ -7,9 +7,9 @@ class FaceController {
 
         const result =  await faceDetection(request.file);
 
-        // if(!result){
-        //     return response.status(300).json({message: "Acesso negado"});
-        // }
+        if(!result){
+            return response.status(300).json({message: "Acesso negado"});
+        }
 
         return response.status(200).json({message: `Bem vido ${result}`});
         

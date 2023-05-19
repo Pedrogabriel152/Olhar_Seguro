@@ -11,7 +11,7 @@ const faceDetection = async (imageReques) => {
 
     const image = await canvas.loadImage(`${imageReques.path}`);
 
-    const labels = ['Pedro'];
+    const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
 
     const labeledFaceDescriptors = await Promise.all(
         labels.map(async label => {
@@ -44,9 +44,9 @@ const faceDetection = async (imageReques) => {
     const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
    
     const results = faceMatcher.findBestMatch(detections.descriptor)
-    console.log("***************************************************************************")
-    console.log(results)
-    console.log("***************************************************************************")
+    // console.log("***************************************************************************")
+    // console.log(results)
+    // console.log("***************************************************************************")
 
     return results.label;
 
