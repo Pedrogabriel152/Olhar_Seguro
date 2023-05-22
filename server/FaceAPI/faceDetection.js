@@ -33,7 +33,7 @@ const faceDetection = async (imageReques) => {
                 console.log(error);
             }
 
-        return await new faceapi.LabeledFaceDescriptors(label, descriptions);
+        return new faceapi.LabeledFaceDescriptors(label, descriptions);
         })
     )
 

@@ -6,9 +6,13 @@ const loadModels = async () => {
     const { Canvas, Image, ImageData } = canvas;
     faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
-    await faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL);
-    await faceapi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL);
-    await faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL);
+    const models = [
+        faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL),
+        faceapi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL),
+        faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL)
+    ]
+
+    return Promise.all(models)
 }
 
 module.exports = {
