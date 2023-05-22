@@ -1,6 +1,7 @@
 
-import { styled } from 'styled-components';
-import logoBack from '../img/teste.png'
+import styled from 'styled-components';
+import logoBack from '../img/fundo.svg'
+
 
 export const Body = styled.body`
     color: rgb(var(--foreground-rgb));
@@ -17,7 +18,7 @@ export const Body = styled.body`
         background-position: center;
         margin-top: 0px;
         width: auto;
-        height: 713px;
+        height: 100vh;
 `;
 
 export const Container = styled.div`
@@ -32,6 +33,10 @@ export const ContainerInterno = styled.div`
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: minmax(250px, 3vh) minmax(150px, 5vh);
     place-items: center;
+    svg{
+        margin-top: 190px;
+    }
+    
 `;
 
 export const Column = styled.div`
@@ -48,10 +53,11 @@ export const ExternalBox = styled.div`
     flex-wrap: nowrap | wrap | wrap-reverse;
     justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly | start | end | left | right ... + safe | unsafe;
     // background-color: black;
-    width: 650px;
-    height: 500px;
-    border-radius: 50px;
+    width: 600px;
+    height: 450px;
+    border-radius: 100px;
     opacity: [0.9, 0.8, 0.7];
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 `;
 
 export const Buttons = styled.button`
@@ -59,15 +65,20 @@ export const Buttons = styled.button`
     font-size: 16px;
     font-family:arial, roboto, helvetica;
     font-weight: bold;
-    border-radius: 15px;
+    border-radius: 30px;
     border: none;
     width: 150px;
     height: 50px;
-    margin-top: auto;
+    margin-bottom: 60px;
     padding: 0.25em 1em;
     cursor: pointer;
     transition: 0.5s all ease-out;
+    &:hover{
+        background-color: #028309;
+        transition: 600ms;
+    }
 `;
+
 export const Typography = styled.div`
     color: white;
     font-size: 16px;
@@ -83,14 +94,24 @@ export const Typography = styled.div`
 //     width: auto;
 //     height: 750px;
 // `;
+export const CameraContainer = styled.div`
+    width: 600px;
+    height: 450px;
+    border-radius: 100px;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
 
 export const AppAplication = styled.div`
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: auto;
     flex-direction: column; 
     align-items: center;
     justify-content: space-between;
+    
 `;
 
 export const AppVideo = styled.div`
@@ -100,6 +121,8 @@ export const AppVideo = styled.div`
 `;
 
 export const Canva = styled.div`
-    position: absolute;
-    top: 100px;
+    position: fixed;
+    top: 300px;
 `;
+
+

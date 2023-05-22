@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react"
 import * as faceapi from "face-api.js"
-import { Canva, AppVideo, AppAplication } from "../style/Style"
+import { Canva, AppAplication, CameraContainer } from "../style/Style"
 
 const Aplication = (props: any) =>{
 
@@ -92,10 +92,10 @@ const Aplication = (props: any) =>{
     return(
         <>
         <AppAplication>
-        <h1>Teste</h1>
-        <AppVideo>
-        <video crossOrigin="anonymous" ref={videoRef} width={940} height={650}  autoPlay/>
-        </AppVideo>
+        {/* <h1>Teste</h1> */}
+        <CameraContainer>
+        <video crossOrigin="anonymous" ref={videoRef} autoPlay/>
+        </CameraContainer>
         <Canva>
         <canvas ref={canvasRef} width={940} height={650}/>
         </Canva>

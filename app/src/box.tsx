@@ -1,12 +1,12 @@
 import Button from './services/button';
-import Image from './img';
 import { ExternalBox, InternalBox, Container, ContainerInterno, Column } from './style/Style';
+import { ReactSVG } from 'react-svg';
+import logo from './img/logo.svg';
+
 
 const HomeBox = (props: any) => {
 
   const label = "Iniciar"
-
-  const alt = "Olhar Digital"
 
   return (
     <div>
@@ -14,7 +14,7 @@ const HomeBox = (props: any) => {
       <InternalBox> 
         <ContainerInterno>
           <Column>
-          <Image alt={alt} />
+          <ReactSVG src={logo}/>
           </Column>
           <Column>
           <Button labelButton= {label}/>
