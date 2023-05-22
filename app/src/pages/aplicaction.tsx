@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react"
 import * as faceapi from "face-api.js"
 import { Canva, AppAplication, CameraContainer } from "../style/Style"
+import Button from "../services/button";
 
 const Aplication = (props: any) =>{
 
@@ -99,6 +100,7 @@ const Aplication = (props: any) =>{
         <Canva>
         <canvas ref={canvasRef} width={940} height={650}/>
         </Canva>
+        <Button labelButton="Voltar" to="/"/>
         </AppAplication>
         </>
     )
