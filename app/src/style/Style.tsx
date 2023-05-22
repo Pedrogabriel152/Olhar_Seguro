@@ -108,9 +108,11 @@ export const CameraContainer = styled.div`
 export const AppAplication = styled.div`
     display: flex;
     width: auto;
+    height: 100vh;
     flex-direction: column; 
     align-items: center;
     justify-content: space-between;
+    background-color: #dfdbdb;
     
 `;
 
@@ -125,4 +127,7 @@ export const Canva = styled.div`
     top: 300px;
 `;
 
+export const Button2 = styled.button`
+    
+`;
 
