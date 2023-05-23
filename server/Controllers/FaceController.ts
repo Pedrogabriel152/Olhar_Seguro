@@ -3,8 +3,6 @@ import faceDetection from '../FaceAPI/faceDetection';
 
 class FaceController {
     public static async compare(request:Request, response: Response) {
-        // console.log(request)
-
         const result =  await faceDetection(request.file);
 
         if(!result){
@@ -12,7 +10,6 @@ class FaceController {
         }
 
         return response.status(200).json({message: `Bem vindo ${result}`});
-        
     }
 }
 
