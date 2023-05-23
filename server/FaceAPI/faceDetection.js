@@ -44,7 +44,7 @@ const loadImage = async path => {
     return await canvas.loadImage(path);
 }
 
-
+// Detect face the image
 const detectFace = async (image) => {
     return await faceapi
         .detectSingleFace(image)
@@ -52,6 +52,7 @@ const detectFace = async (image) => {
         .withFaceDescriptor();
 };
 
+// Load the images
 const loadFaceImages = async (label) => {
     const descriptions = [];
     try {
@@ -69,6 +70,7 @@ const loadFaceImages = async (label) => {
     return new faceapi.LabeledFaceDescriptors(label, descriptions);
 };
 
+// Compare the faces
 const compareFace = async (image, labeledFaceDescriptors) => {
     const maxDescriptorDistance = 0.6;
 
