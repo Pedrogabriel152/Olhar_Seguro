@@ -3,7 +3,7 @@ const canvas = require('canvas');
 const MODEL_URL = 'Models/weights';
 
 const faceDetection = async (imageReques) => {
-    await loadModels()
+    await loadModels();
 
     console.log(imageReques)
     const image = await loadImage(`${imageReques.path}`);
@@ -15,11 +15,11 @@ const faceDetection = async (imageReques) => {
           return await loadFaceImages(label);
         })
     );
-    
+
     const results = await compareFace(image, labeledFaceDescriptors);
-    console.log("***************************************************************************")
-    console.log(results)
-    console.log("***************************************************************************")
+    console.log("***************************************************************************");
+    console.log(results);
+    console.log("***************************************************************************");
 
     return results.label;
 
@@ -34,9 +34,9 @@ const loadModels = async () => {
         faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL),
         faceapi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL),
         faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL),
-    ]
+    ];
 
-    return await Promise.all(models)
+    return await Promise.all(models);
 };
 
 // Load Image
@@ -60,8 +60,7 @@ const loadFaceImages = async (label) => {
         console.log(img)
         const detections = await faceapi.detectSingleFace(img)
             .withFaceLandmarks()
-            .withFaceDescriptor()
-    ;
+            .withFaceDescriptor();
         descriptions.push(detections.descriptor);
       }
     } catch (error) {
@@ -71,15 +70,13 @@ const loadFaceImages = async (label) => {
 };
 
 const compareFace = async (image, labeledFaceDescriptors) => {
-    const maxDescriptorDistance = 0.6
-    console.log(labeledFaceDescriptors)
+    const maxDescriptorDistance = 0.6;
 
     const detection = await detectFace(image);
-    console.log(detection)
 
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
    
-    const results = faceMatcher.findBestMatch(detection.descriptor)
+    const results = faceMatcher.findBestMatch(detection.descriptor);
 
     return results;
 }
