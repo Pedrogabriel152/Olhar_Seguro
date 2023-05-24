@@ -6,9 +6,9 @@ import { Request } from 'express'
 const imageStorage = multer.diskStorage({
     destination: (req: Request, file, cb) =>{
 
-        const folder: string = "students"
+        const folder: string = "images"
 
-        cb(null, `public/images/${folder}`)
+        cb(null, `public/${folder}`)
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + String(Math.floor(Math.random() * 1000)) + path.extname(file.originalname))
