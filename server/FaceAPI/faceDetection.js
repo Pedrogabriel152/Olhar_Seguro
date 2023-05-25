@@ -16,6 +16,7 @@ const faceDetection = async (imageReques) => {
     console.log(image)
     const labels = ['Pedro'];
 
+
     const fullFaceDescriptions = await faceapi
         .detectAllFaces(image)
         .withFaceLandmarks()

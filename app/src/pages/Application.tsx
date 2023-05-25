@@ -21,18 +21,7 @@ const Application = (props: any) =>{
 
     useEffect(() => {
         startVideo()
-        videoRef && loadmodels()
-        const loadModels = async () => {
-          const MODEL_URL = process.env.PUBLIC_URL + '/models';
-    
-          Promise.all([
-            faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-            faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-            faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-            faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-          ]).then(()=>setModelsLoaded(true));
-        }
-        loadModels();
+        videoRef 
       }, []);
 
     const startVideo = () =>{
@@ -42,18 +31,6 @@ const Application = (props: any) =>{
         })
         .catch((error)=>{
             console.log(error)
-        })
-    }
-
-    const loadmodels = () =>{
-
-        Promise.all([
-            faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
-            faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-            faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
-            faceapi.nets.faceExpressionNet.loadFromUri("/models"),
-        ]).then(()=>{
-            faceMyDetect()
         })
     }
 
