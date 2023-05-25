@@ -84,33 +84,37 @@ export const Typography = styled.div`
     font-size: 16px;
 `;
 
-// export const Img = styled.div`
-//     background-image: url('${logoBack}');
-//     background-color: #0a89da;
-//     background-size: cover;
-//     background-repeat: no-repeat;
-//     background-position: center;
-//     margin-top: 0px;
-//     width: auto;
-//     height: 750px;
-// `;
+export const Img = styled.div`
+    background-image: url('${logoBack}');
+    background-color: #0a89da;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 0px;
+    width: auto;
+    height: 750px;
+`;
+
 export const CameraContainer = styled.div`
     width: 600px;
     height: 450px;
     border-radius: 100px;
     overflow: hidden;
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 `;
 
 export const AppAplication = styled.div`
     display: flex;
     width: auto;
+    height: 100vh;
     flex-direction: column; 
     align-items: center;
     justify-content: space-between;
+    background-color: #f1eeee;
     
 `;
 
@@ -126,3 +130,11 @@ export const Canva = styled.div`
 `;
 
 
+export const Button2 = styled.button`
+    border: none;
+    height: 50px;
+    background-color:#f1eeee;
+    position: absolute;
+    top: 85%;
+    overflow: hidden;
+`;
