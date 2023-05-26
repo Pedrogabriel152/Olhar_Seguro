@@ -1,21 +1,29 @@
 import Button from './services/button';
-import Image from './img';
-import { ExternalBox, InternalBox } from './style/Style';
+import { ExternalBox, InternalBox, Container, ContainerInterno, Column } from './style/Style';
+import { ReactSVG } from 'react-svg';
+import logo from './img/logo.svg';
 
-const Box = (props: any) => {
+
+const HomeBox = (props: any) => {
 
   const label = "Iniciar"
 
   return (
     <div>
-     <ExternalBox>
-        <InternalBox>
-            <Image/>
-            <Button labelButton= {label}/>
-        </InternalBox>
-     </ExternalBox>
+      <Container>
+      <InternalBox> 
+        <ContainerInterno>
+          <Column>
+          <ReactSVG src={logo}/>
+          </Column>
+          <Column>
+          <Button labelButton= {label} to='/aplication'/>
+          </Column>
+        </ContainerInterno>
+      </InternalBox>
+      </Container>
     </div>
   );
 }
 
-export default Box
+export default HomeBox
