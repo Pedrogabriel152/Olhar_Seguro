@@ -74,11 +74,11 @@ const loadFaceImages = async (label) => {
 const compareFace = async (image, labeledFaceDescriptors) => {
     const maxDescriptorDistance = 0.6;
 
-    const detection = await detectFace(image);
+    // const detection = await detectFace(image);
 
     const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
    
-    const results = faceMatcher.findBestMatch(detection.descriptor);
+    const results = faceMatcher.findBestMatch(image.descriptor);
 
     return results;
 }

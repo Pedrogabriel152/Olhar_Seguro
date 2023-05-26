@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react"
 import * as faceapi from "face-api.js"
 import { Canva, AppVideo, AppAplication } from "../style/Style"
+import { api } from "../api/api";
 
 const Aplication = (props: any) =>{
 
@@ -64,6 +65,10 @@ const Aplication = (props: any) =>{
               }
               
             const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+            console.log("uuidgfihsadgiash")
+            api.post('/',{
+                detection: detections
+            }).then(res => console.log(res)).catch(error => console.log(error))
             faceapi.matchDimensions(canvasRef.current, displaySize);
             const resizedDetections = faceapi.resizeResults(detections, displaySize);
             // const detections = await faceapi.detectAllFaces(videoRef.current,

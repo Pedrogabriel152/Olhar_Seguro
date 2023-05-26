@@ -3,9 +3,10 @@ import faceDetection from '../FaceAPI/faceDetection';
 
 class FaceController {
     public static async compare(request:Request, response: Response) {
-        const result =  await faceDetection(request.file);
+        const {detection} = request.body
+        const result =  await faceDetection(detection);
 
-        if(!result){
+        if(result === 'unknown'){
             return response.status(300).json({message: "Acesso negado"});
         }
 
