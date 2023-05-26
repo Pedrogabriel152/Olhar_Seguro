@@ -100,9 +100,10 @@ export const CameraContainer = styled.div`
     border-radius: 100px;
     overflow: hidden;
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 `;
 
 export const AppAplication = styled.div`
@@ -112,7 +113,7 @@ export const AppAplication = styled.div`
     flex-direction: column; 
     align-items: center;
     justify-content: space-between;
-    background-color: #dfdbdb;
+    background-color: #f1eeee;
     
 `;
 
@@ -127,7 +128,12 @@ export const Canva = styled.div`
     top: 300px;
 `;
 
-export const Button2 = styled.button`
-    
-`;
 
+export const Button2 = styled.button`
+    border: none;
+    height: 50px;
+    background-color:#f1eeee;
+    position: absolute;
+    top: 85%;
+    overflow: hidden;
+`;
