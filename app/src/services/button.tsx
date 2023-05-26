@@ -3,9 +3,10 @@ import { Buttons, Typography, Column } from "../style/Style"
 
 type StringProps = {
     labelButton: string
+    to: string
 }
 
-const Button = ({labelButton}: StringProps) =>{
+const Button = ({labelButton, to}: StringProps) =>{
 
     const handleClick = () =>{
        console.log("Iniciar") 
@@ -13,7 +14,7 @@ const Button = ({labelButton}: StringProps) =>{
 
     return(
         <>
-        <Link to={'/aplication'}>
+        <Link to={to}>
             
             <Buttons onClick={()=>handleClick()}>
                 <Typography>

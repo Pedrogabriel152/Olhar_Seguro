@@ -17,7 +17,7 @@ const HomeBox = (props: any) => {
           <ReactSVG src={logo}/>
           </Column>
           <Column>
-          <Button labelButton= {label}/>
+          <Button labelButton= {label} to='/aplication'/>
           </Column>
         </ContainerInterno>
       </InternalBox>

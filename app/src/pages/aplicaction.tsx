@@ -101,7 +101,7 @@ const Aplication = (props: any) =>{
         <canvas ref={canvasRef} width={940} height={650}/>
         </Canva>
         <Button2>
-        <Button labelButton= {"Voltar"}/>
+        <Button labelButton="Voltar" to="/"/>
         </Button2>
         </AppAplication>
         </>
