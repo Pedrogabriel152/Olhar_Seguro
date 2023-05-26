@@ -23,14 +23,19 @@ const Application = (props: any) =>{
         startVideo()
         videoRef && loadmodels()
         const loadModels = async () => {
-          const MODEL_URL = process.env.PUBLIC_URL + '/models';
+          const MODEL_URL ='models';
+          console.log(MODEL_URL);
     
           Promise.all([
-            faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-            faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-            faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-            faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-          ]).then(()=>setModelsLoaded(true));
+            faceapi.nets.tinyFaceDetector.loadFromUri('public/models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('public/models'),
+            faceapi.nets.faceRecognitionNet.loadFromUri('public/models'),
+            faceapi.nets.faceExpressionNet.loadFromUri('public/models'),
+          ]).then((res)=>{
+            console.log(res)
+            setModelsLoaded(true)
+          })
+          .catch(error => console.log(error));
         }
         loadModels();
       }, []);
@@ -64,7 +69,8 @@ const Application = (props: any) =>{
                 height: videoHeight
               }
               
-            const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+            const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
+            console.log(detections)
             faceapi.matchDimensions(canvasRef.current, displaySize);
             const resizedDetections = faceapi.resizeResults(detections, displaySize);
             // const detections = await faceapi.detectAllFaces(videoRef.current,
