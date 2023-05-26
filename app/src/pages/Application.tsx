@@ -2,11 +2,14 @@ import { useRef, useEffect, useState } from "react"
 import * as faceapi from "face-api.js"
 import { Canva, AppApplication, CameraContainer, Button2 } from "../style/Style"
 import Button from "../services/button";
+import { useNavigate } from "react-router";
 
 const Application = (props: any) =>{
 
     const [modelsLoaded, setModelsLoaded] = useState<any>(false);
     const [captureVideo, setCaptureVideo] = useState(false);
+    const [videoplay, setVide0Play] = useState<boolean>(true);
+    const navigate = useNavigate();
 
     const videoHeight = 480;
     const videoWidth = 640;
@@ -96,18 +99,24 @@ const Application = (props: any) =>{
     }, 1000)
     }
 
+    const handleOnClick = () => {
+      alert('Clicou')
+      setVide0Play(false);
+      navigate('/')
+    }
+
     return(
         <>
         <AppApplication>
         {/* <h1>Teste</h1> */}
         <CameraContainer>
-        <video crossOrigin="anonymous" ref={videoRef} autoPlay/>
+        {videoplay && <video crossOrigin="anonymous" ref={videoRef} autoPlay/>}
         </CameraContainer>
         <Canva>
         <canvas ref={canvasRef} width={940} height={650}/>
         </Canva>
         <Button2>
-        <Button labelButton="Voltar" to="/"/>
+        <Button labelButton="Voltar" to="/" onclick={handleOnClick}/>
         </Button2>
         </AppApplication>
         </>
