@@ -99,6 +99,15 @@ const Application = (props: any) =>{
     }, 1000)
     }
 
+    const submit = (detections: faceapi.WithFaceDescriptor<faceapi.WithFaceExpressions<faceapi.WithFaceLandmarks<{
+      detection: faceapi.FaceDetection;
+  }, faceapi.FaceLandmarks68>>>[] | []) => {
+      if(!detections){
+        return;
+      }
+      
+    }
+
     const handleOnClick = () => {
       alert('Clicou')
       setVide0Play(false);

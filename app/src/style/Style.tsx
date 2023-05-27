@@ -126,7 +126,7 @@ export const AppVideo = styled.div`
 
 export const Canva = styled.div`
     position: fixed;
-    top: 300px;
+    top: 100px;
 `;
 
 
