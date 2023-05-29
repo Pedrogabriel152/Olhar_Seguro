@@ -4,6 +4,7 @@ import faceDetection from '../FaceAPI/faceDetection';
 class FaceController {
     public static async compare(request:Request, response: Response) {
         // console.log(request)
+        console.log("uidagsdiajsbdhiasdy")
 
         const result =  await faceDetection(request.file);
 
