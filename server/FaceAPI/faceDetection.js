@@ -58,10 +58,8 @@ const loadFaceImages = async (label) => {
     try {
       for (let i = 1; i <= 5; i++) {
         const img = await loadImage(`images/${label}/${i}.jpg`);
-        console.log(img)
-        const detections = await faceapi.detectSingleFace(img)
-            .withFaceLandmarks()
-            .withFaceDescriptor();
+        console.log(img);
+        const detections = await detectFace(img);
         descriptions.push(detections.descriptor);
       }
     } catch (error) {

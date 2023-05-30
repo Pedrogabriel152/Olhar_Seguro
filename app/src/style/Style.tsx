@@ -8,16 +8,16 @@ export const Body = styled.body`
         to bottom,
         transparent,
         rgb(var(--background-end-rgb))
-        )
-        rgb(var(--background-start-rgb));
-        background-image: url('${logoBack}');
-        background-color: #0a89da;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        margin-top: 0px;
-        width: auto;
-        height: 100vh;
+    )
+    rgb(var(--background-start-rgb));
+    background-image: url('${logoBack}');
+    background-color: #0a89da;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 0px;
+    width: auto;
+    height: 100vh;
 `;
 
 export const Container = styled.div`
@@ -35,7 +35,6 @@ export const ContainerInterno = styled.div`
     svg{
         margin-top: 190px;
     }
-    
 `;
 
 export const Column = styled.div`
@@ -45,7 +44,7 @@ export const Column = styled.div`
 export const ExternalBox = styled.div`
     width: 650px;
     height: 500px;
-  `;
+`;
 
 export const InternalBox = styled.div`
     background-color: rgba( 255, 255, 240, 1);
