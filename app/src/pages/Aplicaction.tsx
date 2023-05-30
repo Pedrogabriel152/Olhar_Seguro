@@ -243,31 +243,25 @@ const Application = (props: any) =>{
   //     }, 2400000)
   //   }
 
-    const handleOnClick = () => {
-      alert('Clicou')
-      // setVide0Play(false);
-      navigate('/')
-    }
-
     return(
         <>
         <AppApplication>
-        <CameraContainer>
-        <Webcam
-          audio={false}
-          ref={videoRef}
-          screenshotFormat="image/jpeg"
-          height={videoHeight}
-          width={videoWidth}
-        />
-        </CameraContainer>
-        <button onClick={captureAndSendImage} style={{ background: 'red'}}>Capturar</button>
-        <Canva>
-        <canvas ref={canvasRef} width={940} height={650}/>
-        </Canva>
-        <Button2>
-        <Button labelButton="Voltar" to="/" onclick={handleOnClick}/>
-        </Button2>
+          <CameraContainer>
+            <Webcam
+              audio={false}
+              ref={videoRef}
+              screenshotFormat="image/jpeg"
+              height={videoHeight}
+              width={videoWidth}
+            />
+          </CameraContainer>
+          <button onClick={captureAndSendImage} style={{ background: 'red'}}>Capturar</button>
+          <Canva>
+            <canvas ref={canvasRef} width={940} height={650}/>
+          </Canva>
+          <Button2>
+            <Button labelButton="Voltar" to="/"/>
+          </Button2>
         </AppApplication>
         </>
     )
