@@ -12,14 +12,14 @@ const faceDetection = async (imageReques) => {
     await faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL);
     console.log(imageReques)
 
-    const image = await canvas.loadImage(`${imageReques.path}`);
+    // const image = await canvas.loadImage(`${imageReques.path}`);
     console.log(image)
     const labels = ['Pedro'];
 
-    const fullFaceDescriptions = await faceapi
-        .detectAllFaces(image)
-        .withFaceLandmarks()
-        .withFaceDescriptors();
+    // const fullFaceDescriptions = await faceapi
+    //     .detectAllFaces(image)
+    //     .withFaceLandmarks()
+    //     .withFaceDescriptors();
 
 
     const labeledFaceDescriptors = await Promise.all(

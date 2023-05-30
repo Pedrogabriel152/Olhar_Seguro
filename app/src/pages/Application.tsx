@@ -145,7 +145,9 @@ const Application = (props: any) =>{
           }
 
           console.log('[IMAGE DATA] -> ',imageData)
-          const response = await api.post('/', imageData);
+          const response = await api.post('/', {
+            image: imageData
+          });
     
           // Trate a resposta do backend aqui
           console.log('[RESPONSE API] -> ',response.data);
