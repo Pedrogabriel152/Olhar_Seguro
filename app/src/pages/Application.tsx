@@ -274,12 +274,6 @@ const Application = (props: any) =>{
         <Button2>
         <Button labelButton="Voltar" to="/" onclick={handleOnClick}/>
         </Button2>
-
-        {image && (
-        <img
-          src={image}
-        />
-      )}
         </AppApplication>
         </>
     )
