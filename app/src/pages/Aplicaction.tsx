@@ -10,9 +10,6 @@ import '@tensorflow/tfjs';
 
 const Application = (props: any) =>{
     const [image, setImage] = useState<any>();
-    const [modelsLoaded, setModelsLoaded] = useState<any>(false);
-    const [captureVideo, setCaptureVideo] = useState(false);
-    const [videoplay, setVide0Play] = useState<boolean>(true);
     const navigate = useNavigate();
     const canvas = document.createElement('canvas');
 
@@ -21,7 +18,6 @@ const Application = (props: any) =>{
 
     const videoRef: any = useRef(null)
     const canvasRef: any = useRef()
-    const webcamRef: any = useRef(null);
 
     // useEffect(()=>{
     //     startVideo()
@@ -249,27 +245,25 @@ const Application = (props: any) =>{
 
     const handleOnClick = () => {
       alert('Clicou')
-      setVide0Play(false);
+      // setVide0Play(false);
       navigate('/')
     }
 
     return(
         <>
         <AppApplication>
-        {/* <h1>Teste</h1> */}
         <CameraContainer>
-        {/* {videoplay && <video id="video"/>} */}
         <Webcam
           audio={false}
           ref={videoRef}
           screenshotFormat="image/jpeg"
+          height={videoHeight}
+          width={videoWidth}
         />
         </CameraContainer>
         <button onClick={captureAndSendImage} style={{ background: 'red'}}>Capturar</button>
         <Canva>
         <canvas ref={canvasRef} width={940} height={650}/>
-        
-        
         </Canva>
         <Button2>
         <Button labelButton="Voltar" to="/" onclick={handleOnClick}/>
