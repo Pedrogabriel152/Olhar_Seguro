@@ -6,7 +6,7 @@ const faceDetection = async (imageReques) => {
     await loadModels();
 
     console.log(imageReques)
-    const image = await loadImage(`${imageReques.path}`);
+    // const image = await loadImage(`${imageReques.path}`);
 
     const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
 
