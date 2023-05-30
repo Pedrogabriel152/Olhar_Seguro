@@ -48,7 +48,7 @@ export const ExternalBox = styled.div`
     height: 500px;
   `;
 
-  export const InternalBox = styled.div`
+export const InternalBox = styled.div`
     background-color: rgba( 255, 255, 240, 1);
     flex-wrap: nowrap | wrap | wrap-reverse;
     justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly | start | end | left | right ... + safe | unsafe;
