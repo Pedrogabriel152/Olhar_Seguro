@@ -26,6 +26,7 @@ export const Container = styled.div`
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: minmax(600px, 3vh);
     place-items: center;
+
 `;
 
 export const ContainerInterno = styled.div`
@@ -84,16 +85,17 @@ export const Typography = styled.div`
     font-size: 16px;
 `;
 
-// export const Img = styled.div`
-//     background-image: url('${logoBack}');
-//     background-color: #0a89da;
-//     background-size: cover;
-//     background-repeat: no-repeat;
-//     background-position: center;
-//     margin-top: 0px;
-//     width: auto;
-//     height: 750px;
-// `;
+export const Img = styled.div`
+    background-image: url('${logoBack}');
+    background-color: #0a89da;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 0px;
+    width: auto;
+    height: 750px;
+`;
+
 export const CameraContainer = styled.div`
     width: 600px;
     height: 450px;
@@ -106,7 +108,7 @@ export const CameraContainer = styled.div`
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 `;
 
-export const AppAplication = styled.div`
+export const AppApplication = styled.div`
     display: flex;
     width: auto;
     height: 100vh;
@@ -137,3 +139,4 @@ export const Button2 = styled.button`
     top: 85%;
     overflow: hidden;
 `;
+
