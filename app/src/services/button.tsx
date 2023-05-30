@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom"
-import { Buttons, Typography } from "../style/Style"
+import { Buttons, Typography, Column } from "../style/Style"
 
 type StringProps = {
     labelButton: string
+    to: string
+    onclick?(): void
 }
 
-const Button = ({labelButton}: StringProps) =>{
+const Button = ({labelButton, to, onclick}: StringProps) =>{
 
     const handleClick = () =>{
        console.log("Iniciar") 
@@ -13,8 +15,9 @@ const Button = ({labelButton}: StringProps) =>{
 
     return(
         <>
-        <Link to={'/aplication'}>
-            <Buttons onClick={()=>handleClick()}>
+        <Link to={to}>
+            
+            <Buttons onClick={onclick? onclick : handleClick}>
                 <Typography>
                 {labelButton}
                 </Typography> 
