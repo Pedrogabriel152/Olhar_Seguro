@@ -30,10 +30,11 @@ const Application = (props: any) =>{
 
     useEffect(() => {
       const loadModels = async () => {
-        await faceapi.nets.tinyFaceDetector.loadFromUri("/models")
-        await faceapi.nets.faceLandmark68Net.loadFromUri("/models")
-        await faceapi.nets.faceRecognitionNet.loadFromUri("/models")
-        await faceapi.nets.faceExpressionNet.loadFromUri("/models")
+        await faceapi.nets.tinyFaceDetector.loadFromUri("models")
+        await faceapi.nets.ssdMobilenetv1.loadFromUri("models");
+        await faceapi.nets.faceLandmark68Net.loadFromUri("models")
+        await faceapi.nets.faceRecognitionNet.loadFromUri("models")
+        await faceapi.nets.faceExpressionNet.loadFromUri("models")
   
         // Inicie a detecção de rosto após o carregamento dos modelos
         // startFaceDetection();
@@ -96,7 +97,7 @@ const Application = (props: any) =>{
             const ctx = canvas.getContext('2d');
             ctx!.drawImage(image, 0, 0);
       
-            const netInput = new TNetInput(canvas);
+            const netInput = faceapi.toNetInput(canvas);
       
             resolve(netInput);
           };
@@ -106,19 +107,17 @@ const Application = (props: any) =>{
           };
       
           image.src = imageData;
+
+          return image
         });
+
+        return image
       };
     
       const detectFaceAndSendImage = async (imageData: any) => {
         try {
           // Load Image
-          const imageCanvas = await loadImage(imageData);
-
-          if(!imageCanvas){
-            alert("Não tem")
-            return;
-          }
-
+          const imageCanvas = await transformToTNetInput(imageData);
 
           // console.log('[IMAGE CANVA] -> ', imageCanvas)
           // Detecte a face na imagem
@@ -133,7 +132,7 @@ const Application = (props: any) =>{
           //   // Envie a imagem para o backend aqui
           //   await sendImageToAPI(faceImage[0].toDataURL());
           // }
-          // await sendImageToAPI(faceDetection)
+          await sendImageToAPI(faceDetection)
         } catch (error) {
           console.error(error);
         }
@@ -144,7 +143,9 @@ const Application = (props: any) =>{
           if(imageData.length == 0){
             return;
           }
-          const response = await api.post('/', { image: imageData });
+
+          console.log('[IMAGE DATA] -> ',imageData)
+          const response = await api.post('/', imageData);
     
           // Trate a resposta do backend aqui
           console.log('[RESPONSE API] -> ',response.data);

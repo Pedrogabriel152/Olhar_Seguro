@@ -3,16 +3,20 @@ import faceDetection from '../FaceAPI/faceDetection';
 
 class FaceController {
     public static async compare(request:Request, response: Response) {
-        // console.log(request)
-        console.log("uidagsdiajsbdhiasdy")
+        
+        const faceDetectionFront = request.body
 
-        const result =  await faceDetection(request.file);
+        console.log(faceDetectionFront)
+
+        // const result =  await faceDetection(image);
 
         // if(!result){
         //     return response.status(300).json({message: "Acesso negado"});
         // }
 
-        return response.status(200).json({message: `Bem vido ${result}`});
+        // return response.status(200).json({message: `Bem vido ${result}`});
+
+        return response.json('Olá')
         
     }
 }
