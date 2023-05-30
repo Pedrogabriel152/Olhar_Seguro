@@ -6,7 +6,7 @@ const faceDetection = async (imageReques) => {
     await loadModels();
 
     console.log(imageReques)
-    const image = await loadImage(`${imageReques.path}`);
+    // const image = await loadImage(`${imageReques.path}`);
 
     const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
 
@@ -16,7 +16,7 @@ const faceDetection = async (imageReques) => {
         })
     );
 
-    const results = await compareFace(image, labeledFaceDescriptors);
+    const results = await compareFace(imageReques, labeledFaceDescriptors);
     console.log("***************************************************************************");
     console.log(results);
     console.log("***************************************************************************");
@@ -59,9 +59,7 @@ const loadFaceImages = async (label) => {
       for (let i = 1; i <= 5; i++) {
         const img = await loadImage(`images/${label}/${i}.jpg`);
         console.log(img)
-        const detections = await faceapi.detectSingleFace(img)
-            .withFaceLandmarks()
-            .withFaceDescriptor();
+        const detections = await detectFace(img)
         descriptions.push(detections.descriptor);
       }
     } catch (error) {
