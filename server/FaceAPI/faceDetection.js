@@ -15,7 +15,7 @@ const faceDetection = async (imageReques) => {
           return await loadFaceImages(label);
         })
     );
-
+ 
     const results = await compareFace(imageReques, labeledFaceDescriptors);
     console.log("***************************************************************************");
     console.log(results);
@@ -31,9 +31,11 @@ const loadModels = async () => {
     faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
     const models = [
-        faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL),
-        faceapi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL),
-        faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL),
+      faceapi.nets.tinyFaceDetector.loadFromDisk(MODEL_URL),
+      faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL),
+      faceapi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL),
+      faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL),
+      faceapi.nets.faceExpressionNet.loadFromDisk(MODEL_URL)
     ];
 
     return await Promise.all(models);
@@ -56,23 +58,40 @@ const detectFace = async (image) => {
 const loadFaceImages = async (label) => {
     const descriptions = [];
     try {
-      for (let i = 1; i <= 5; i++) {
-        const img = await loadImage(`images/${label}/${i}.jpg`);
+      // for (let i = 1; i <= 5; i++) {
+        const img = await loadImage(`images/${label}/1.jpg`);
         console.log(img)
-        const detections = await detectFace(img)
-        descriptions.push(detections.descriptor);
-      }
+        const detections = await faceapi.detectSingleFace(img)
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+        if(detections){
+          descriptions.push(detections.descriptor);
+        }
+      // }
     } catch (error) {
       console.log(error);
     }
-    return new faceapi.LabeledFaceDescriptors(label, descriptions);
+    // return new faceapi.LabeledFaceDescriptors(label, descriptions);
+    if (descriptions.length > 0) {
+      // Create the labeled face descriptors
+      return new faceapi.LabeledFaceDescriptors(label, descriptions);
+    } else {
+      // Return null or handle the case when no descriptors were loaded
+      return null;
+    }
 };
 
 // Compare the faces
 const compareFace = async (image, labeledFaceDescriptors) => {
     const maxDescriptorDistance = 0.6;
 
+    if(!labeledFaceDescriptors){
+      return null;
+    }
+
     // const detection = await detectFace(image);
+    console.log('[IMAGE COMPARE]', image)
+    console.log('[LABEL COMPARE]', labeledFaceDescriptors)
 
     const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
    

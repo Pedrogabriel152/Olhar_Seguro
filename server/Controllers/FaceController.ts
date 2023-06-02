@@ -4,7 +4,7 @@ import faceDetection from '../FaceAPI/faceDetection';
 class FaceController {
     public static async compare(request:Request, response: Response) {
         
-        const image = request.body
+        const {image} = request.body
 
         console.log(image)
 

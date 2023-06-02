@@ -14,7 +14,7 @@ const Application = (props: any) =>{
     const [captureVideo, setCaptureVideo] = useState(false);
     const [videoplay, setVide0Play] = useState<boolean>(true);
     const navigate = useNavigate();
-    const canvas = document.createElement('canvas');
+    // const canvas = document.createElement('canvas');
 
     const videoHeight = 480;
     const videoWidth = 640;
@@ -30,11 +30,21 @@ const Application = (props: any) =>{
 
     useEffect(() => {
       const loadModels = async () => {
-        await faceapi.nets.tinyFaceDetector.loadFromUri("models")
-        await faceapi.nets.ssdMobilenetv1.loadFromUri("models");
-        await faceapi.nets.faceLandmark68Net.loadFromUri("models")
-        await faceapi.nets.faceRecognitionNet.loadFromUri("models")
-        await faceapi.nets.faceExpressionNet.loadFromUri("models")
+        // await faceapi.loadTinyFaceDetectorModel('models')
+        // await faceapi.loadSsdMobilenetv1Model('models')
+        // await faceapi.loadFaceDetectionModel('models')
+        // await faceapi.loadFaceLandmarkModel('models')
+        // await faceapi.loadFaceLandmarkTinyModel("models")
+        // await faceapi.loadFaceRecognitionModel('models')
+        // await faceapi.loadFaceExpressionModel('models')
+        // await faceapi.nets.tinyFaceDetector.loadFromUri("models")
+        // await faceapi.nets.ssdMobilenetv1.loadFromUri("models");
+        // await faceapi.nets.faceLandmark68Net.loadFromUri("models")
+        // await faceapi.nets.faceRecognitionNet.loadFromUri("models")
+        // await faceapi.nets.faceExpressionNet.loadFromUri("models")
+        await faceapi.nets.ssdMobilenetv1.loadFromUri('/models'); // Carregue o modelo adequado
+        await faceapi.nets.faceLandmark68Net.loadFromUri('/models'); // Carregue o modelo adequado
+        await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
   
         // Inicie a detecção de rosto após o carregamento dos modelos
         // startFaceDetection();
@@ -75,15 +85,15 @@ const Application = (props: any) =>{
         await detectFaceAndSendImage(imageSrc);
       }, [videoRef, setImage]);
 
-      const loadImage = async (image: any) => {
-        const ctx = canvas.getContext('2d');
-        canvas.width = image.width;
-        canvas.height = image.height;
-        if(ctx) {
-          ctx!.drawImage(image, 0, 0);
-          return ctx;
-        }
-      }
+      // const loadImage = async (image: any) => {
+      //   const ctx = canvas.getContext('2d');
+      //   canvas.width = image.width;
+      //   canvas.height = image.height;
+      //   if(ctx) {
+      //     ctx!.drawImage(image, 0, 0);
+      //     return ctx;
+      //   }
+      // }
 
       const transformToTNetInput = async (imageData: any) => {
         return new Promise((resolve, reject) => {
@@ -116,23 +126,33 @@ const Application = (props: any) =>{
     
       const detectFaceAndSendImage = async (imageData: any) => {
         try {
-          // Load Image
-          const imageCanvas = await transformToTNetInput(imageData);
-
-          // console.log('[IMAGE CANVA] -> ', imageCanvas)
+          // Carregue a imagem usando a biblioteca canvas
+          const img = new Image();
+          img.src = imageData;
+      
+          // Aguarde o carregamento completo da imagem
+          await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+          });
+      
+          // Converta a imagem em um elemento canvas
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, img.width, img.height);
+      
           // Detecte a face na imagem
-          const faceDetection = await faceapi.detectSingleFace(imageCanvas)
-            .withFaceLandmarks()
-            .withFaceDescriptor();
-          
-            console.log('[FACE DETECTION] -> ', faceDetection)
-          // if (faceDetection) {
-          //   const faceImage = await faceapi.extractFaces(imageData, [faceDetection.]);
-    
-          //   // Envie a imagem para o backend aqui
-          //   await sendImageToAPI(faceImage[0].toDataURL());
-          // }
-          await sendImageToAPI(faceDetection)
+          const detections = await faceapi.detectSingleFace(canvas)
+          .withFaceLandmarks()
+          .withFaceDescriptor();
+      
+          if (detections) {
+            // Envie a imagem para o backend aqui
+            // const faceImage = canvas.toDataURL();
+            await sendImageToAPI(detections);
+          }
         } catch (error) {
           console.error(error);
         }
