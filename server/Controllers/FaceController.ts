@@ -1,20 +1,20 @@
 import { Request , Response, response } from 'express';
 import faceDetection from '../FaceAPI/faceDetection';
 
-class FaceController {
+class FaceController {  
     public static async compare(request:Request, response: Response) {
         
-        const {image} = request.body
+        // const image = request.file
 
-        console.log(image)
+        console.log(request.file)
 
-        const result =  await faceDetection(image);
+        const result =  await faceDetection(request.file);
 
-        // if(!result){
-        //     return response.status(300).json({message: "Acesso negado"});
-        // }
+        if(result == "unknown"){
+            return response.status(300).json({message: "Acesso negado"});
+        }
 
-        return response.status(200).json({message: `Bem vido ${result}`});
+        return response.status(200).json({message: `Bem vinjdo ${result}`});
 
         // return response.json('Olá')
         

@@ -6,7 +6,8 @@ const faceDetection = async (imageReques) => {
     await loadModels();
 
     console.log(imageReques)
-    // const image = await loadImage(`${imageReques.path}`);
+    const image = await loadImage(`${imageReques.path}`);
+    console.log(image)
 
     const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
 
@@ -16,7 +17,7 @@ const faceDetection = async (imageReques) => {
         })
     );
  
-    const results = await compareFace(imageReques, labeledFaceDescriptors);
+    const results = await compareFace(image, labeledFaceDescriptors);
     console.log("***************************************************************************");
     console.log(results);
     console.log("***************************************************************************");
@@ -58,8 +59,8 @@ const detectFace = async (image) => {
 const loadFaceImages = async (label) => {
     const descriptions = [];
     try {
-      // for (let i = 1; i <= 5; i++) {
-        const img = await loadImage(`images/${label}/1.jpg`);
+      for (let i = 1; i <= 5; i++) {
+        const img = await loadImage(`images/${label}/${i}.jpg`);
         console.log(img)
         const detections = await faceapi.detectSingleFace(img)
         .withFaceLandmarks()
@@ -67,7 +68,7 @@ const loadFaceImages = async (label) => {
         if(detections){
           descriptions.push(detections.descriptor);
         }
-      // }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -89,13 +90,13 @@ const compareFace = async (image, labeledFaceDescriptors) => {
       return null;
     }
 
-    // const detection = await detectFace(image);
+    const detection = await detectFace(image);
     console.log('[IMAGE COMPARE]', image)
     console.log('[LABEL COMPARE]', labeledFaceDescriptors)
 
     const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
    
-    const results = faceMatcher.findBestMatch(image.descriptor);
+    const results = faceMatcher.findBestMatch(detection.descriptor);
 
     return results;
 }

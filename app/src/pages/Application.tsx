@@ -126,6 +126,15 @@ const Application = (props: any) =>{
     
       const detectFaceAndSendImage = async (imageData: any) => {
         try {
+
+          const blob = await dataURItoBlob(imageData);
+          const file = new File([blob], 'captured-image.jpg', { type: 'image/jpeg' });
+
+           // Verifique o tipo de arquivo
+          if (file.type !== 'image/jpeg') {
+            console.log('Formato de imagem não suportado. Por favor, selecione uma imagem JPEG.');
+            return;
+          }
           // Carregue a imagem usando a biblioteca canvas
           const img = new Image();
           img.src = imageData;
@@ -151,7 +160,8 @@ const Application = (props: any) =>{
           if (detections) {
             // Envie a imagem para o backend aqui
             // const faceImage = canvas.toDataURL();
-            await sendImageToAPI(detections);
+            // setImage(img);
+            await sendImageToAPI(file);
           }
         } catch (error) {
           console.error(error);
@@ -160,13 +170,17 @@ const Application = (props: any) =>{
       
       const sendImageToAPI = async (imageData:any) => {
         try {
-          if(imageData.length == 0){
-            return;
-          }
-
           console.log('[IMAGE DATA] -> ',imageData)
+          console.log(imageData)
+          // Converta a imagem capturada em um objeto File
+          // const imageFile = await urlToBlob(imageData);
+          // console.log(imageFile)
           const response = await api.post('/', {
             image: imageData
+          },{
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
           });
     
           // Trate a resposta do backend aqui
@@ -175,6 +189,20 @@ const Application = (props: any) =>{
           console.error(error);
         }
       };
+
+      // Função para converter a imagem capturada em um objeto Blob
+      const dataURItoBlob = async (dataURI: any) => {
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+      
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+      
+        return new Blob([ab], { type: mimeString });
+      }
       // useLayoutEffect(() => {
       //   setInterval(() => videoRef && loadmodels(), 1000);
       //   // const loadModels = async () => {
