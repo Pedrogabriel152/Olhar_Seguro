@@ -1,99 +1,140 @@
 const faceapi = require('face-api.js');
 const canvas = require('canvas');
+const fs = require('fs');
+const path = require('path');
 const MODEL_URL = 'Models/weights';
+const folderName = `Database`;
+const filePath = 'database.json';
 
 const faceDetection = async (imageReques) => {
+    await loadModels();
 
+    console.log(imageReques)
+    const image = await loadImage(`${imageReques.path}`);
+    console.log(image)
+
+    if (!fs.existsSync(folderName)) {
+      fs.mkdirSync(folderName);
+      const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
+
+      const labeledFaceDescriptors =  await Promise.all(
+          labels.map(async (label) => {
+            return await loadFaceImages(label);
+          })
+      );
+      const database = JSON.stringify(labeledFaceDescriptors);
+      if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
+      }else{
+        fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
+      }
+    }
+    const labeledFaceDescriptors = await Promise.all(
+      await getDatabase()
+    );
+    
+    const results = await compareFace(image, labeledFaceDescriptors);
+    console.log("***************************************************************************");
+    console.log(results);
+    console.log("***************************************************************************");
+
+    return results.label;
+
+};
+
+// Load Models
+const loadModels = async () => {
     const { Canvas, Image, ImageData } = canvas;
     faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
-    await faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL);
-    await faceapi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL);
-    await faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL);
-    console.log(imageReques)
+    const models = [
+      faceapi.nets.tinyFaceDetector.loadFromDisk(MODEL_URL),
+      faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL),
+      faceapi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL),
+      faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL),
+      faceapi.nets.faceExpressionNet.loadFromDisk(MODEL_URL)
+    ];
 
-    const image = await canvas.loadImage(`${imageReques.path}`);
-    console.log(image)
-    const labels = ['Pedro'];
+    return await Promise.all(models);
+};
 
-    const fullFaceDescriptions = await faceapi
-        .detectAllFaces(image)
+// Load Image
+const loadImage = async path => {
+    return await canvas.loadImage(path);
+}
+
+// Detect face the image
+const detectFace = async (image) => {
+    return await faceapi
+        .detectSingleFace(image)
         .withFaceLandmarks()
-        .withFaceDescriptors();
+        .withFaceDescriptor();
+};
 
+// Load the images
+const loadFaceImages = async (label) => {
+    const descriptions = [];
+    try {
+      for (let i = 1; i <= 5; i++) {
+        
+        const img = await loadImage(`images/${label}/${i}.jpg`);
+        console.log(img)
+        const detections = await faceapi.detectSingleFace(img)
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+        if(detections){
+          descriptions.push(detections.descriptor);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // return new faceapi.LabeledFaceDescriptors(label, descriptions);
+    if (descriptions.length > 0) {
+      // Create the labeled face descriptors
+      return new faceapi.LabeledFaceDescriptors(label, descriptions);
+    } else {
+      // Return null or handle the case when no descriptors were loaded
+      return null;
+    }
+};
 
-    const labeledFaceDescriptors = await Promise.all(
-        labels.map(async label => {
-            // // fetch image data from urls and convert blob to HTMLImage element
-            // const imgUrl = `../images/${label}/${label}.png`;
+// Load Database
+const getDatabase = async () => {
+  const databaseString = fs.readFileSync(`${folderName}/${filePath}`,{
+    encoding: 'utf8',
+    flag: 'r'
+  });
 
-            const descriptions = []
-            try {
-                const img =  await canvas.loadImage(`images/${label}/1.jpg`);
-                console.log(img)
-                const detections = await faceapi
-                .detectSingleFace(img)
-                .withFaceLandmarks()
-                .withFaceDescriptor()
+  const database = JSON.parse(databaseString);
 
-                // console.log(detections)
-                descriptions.push(detections.descriptor)
-                
-            }
-            catch(error) {
-                console.log(error);
-            }
+  return await database.map(async person => {
+    const descriptions = [];
+    person.descriptors.map(descriptor => {
+      const float32Array = new Float32Array(descriptor);
+      descriptions.push(float32Array);
+    });
+    return new faceapi.LabeledFaceDescriptors(person.label, descriptions);
+  });
+}
 
-        return await new faceapi.LabeledFaceDescriptors(label, descriptions)
-            
-            // // detect the face with the highest score in the image and compute it's landmarks and face descriptor
-            // const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-            // // console.log(fullFaceDescription)
-            
-            // if (!fullFaceDescription) {
-            //     return "";
-            // }
-            // // console.log(fullFaceDescription)
-            
-            // const faceDescriptors = [fullFaceDescription.descriptor];
-            // // console.log(faceDescriptors);
-            // return new faceapi.LabeledFaceDescriptors(label, faceDescriptors);
-            // console.log(labessd)
-            // return descriptions;
-        })
-    )
+// Compare the faces
+const compareFace = async (image, labeledFaceDescriptors) => {
+    const maxDescriptorDistance = 0.6;
 
-    const maxDescriptorDistance = 0.6
-    console.log(labeledFaceDescriptors)
-    const detections = await faceapi.detectSingleFace(image).withFaceLandmarks().withFaceDescriptor();
+    if(!labeledFaceDescriptors){
+      return null;
+    }
 
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
-    // console.log(faceMatcher)
+    const detection = await detectFace(image);
+    console.log('[IMAGE COMPARE]', image)
+    console.log('[LABEL COMPARE]', labeledFaceDescriptors)
 
-    // console.log(detections)
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
+   
+    const results = faceMatcher.findBestMatch(detection.descriptor);
 
-    // const results = fullFaceDescriptions.map(fd => {
-    //     console.log(fd.descriptor)
-    //     return faceMatcher.findBestMatch(fd.descriptor)
-    // })// image.map(fd => faceMatcher.findBestMatch(fd.descriptor))
-    const results = faceMatcher.findBestMatch(detections.descriptor)
-        console.log("***************************************************************************")
-    console.log(results)
-    console.log("***************************************************************************")
-
-
-    // let box;
-    // let text;
-
-    // results.forEach((bestMatch, i) => {
-    //     box = image[i].detection.box
-    //     text = bestMatch.toString()
-    // })
-
-    // return { text, box };
-
-    // return results.label;
-
+    return results;
 }
 
 module.exports = faceDetection;

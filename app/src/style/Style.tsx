@@ -26,7 +26,6 @@ export const Container = styled.div`
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: minmax(600px, 3vh);
     place-items: center;
-
 `;
 
 export const ContainerInterno = styled.div`
@@ -49,7 +48,7 @@ export const ExternalBox = styled.div`
     height: 500px;
   `;
 
-  export const InternalBox = styled.div`
+export const InternalBox = styled.div`
     background-color: rgba( 255, 255, 240, 1);
     flex-wrap: nowrap | wrap | wrap-reverse;
     justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly | start | end | left | right ... + safe | unsafe;
@@ -126,17 +125,6 @@ export const AppVideo = styled.div`
 `;
 
 export const Canva = styled.div`
-    position: fixed;
-    top: 300px;
-`;
-
-
-export const Button2 = styled.button`
-    border: none;
-    height: 50px;
-    background-color:#f1eeee;
     position: absolute;
-    top: 85%;
-    overflow: hidden;
+    top: 100px;
 `;
-

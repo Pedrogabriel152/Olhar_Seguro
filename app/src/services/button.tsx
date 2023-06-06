@@ -4,9 +4,10 @@ import { Buttons, Typography, Column } from "../style/Style"
 type StringProps = {
     labelButton: string
     to: string
+    onclick?(): void
 }
 
-const Button = ({labelButton, to}: StringProps) =>{
+const Button = ({labelButton, to, onclick}: StringProps) =>{
 
     const handleClick = () =>{
        console.log("Iniciar") 
@@ -16,7 +17,7 @@ const Button = ({labelButton, to}: StringProps) =>{
         <>
         <Link to={to}>
             
-            <Buttons onClick={()=>handleClick()}>
+            <Buttons onClick={onclick? onclick : handleClick}>
                 <Typography>
                 {labelButton}
                 </Typography> 
