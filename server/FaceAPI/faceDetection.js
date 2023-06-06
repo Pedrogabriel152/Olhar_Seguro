@@ -1,6 +1,10 @@
 const faceapi = require('face-api.js');
 const canvas = require('canvas');
+const fs = require('fs');
+const path = require('path');
 const MODEL_URL = 'Models/weights';
+const folderName = `Database`;
+const filePath = 'database.json';
 
 const faceDetection = async (imageReques) => {
     await loadModels();
@@ -9,14 +13,26 @@ const faceDetection = async (imageReques) => {
     const image = await loadImage(`${imageReques.path}`);
     console.log(image)
 
-    const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
+    if (!fs.existsSync(folderName)) {
+      fs.mkdirSync(folderName);
+      const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
 
-    const labeledFaceDescriptors =  await Promise.all(
-        labels.map(async (label) => {
-          return await loadFaceImages(label);
-        })
+      const labeledFaceDescriptors =  await Promise.all(
+          labels.map(async (label) => {
+            return await loadFaceImages(label);
+          })
+      );
+      const database = JSON.stringify(labeledFaceDescriptors);
+      if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
+      }else{
+        fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
+      }
+    }
+    const labeledFaceDescriptors = await Promise.all(
+      await getDatabase()
     );
- 
+    
     const results = await compareFace(image, labeledFaceDescriptors);
     console.log("***************************************************************************");
     console.log(results);
@@ -60,6 +76,7 @@ const loadFaceImages = async (label) => {
     const descriptions = [];
     try {
       for (let i = 1; i <= 5; i++) {
+        
         const img = await loadImage(`images/${label}/${i}.jpg`);
         console.log(img)
         const detections = await faceapi.detectSingleFace(img)
@@ -81,6 +98,25 @@ const loadFaceImages = async (label) => {
       return null;
     }
 };
+
+// Load Database
+const getDatabase = async () => {
+  const databaseString = fs.readFileSync(`${folderName}/${filePath}`,{
+    encoding: 'utf8',
+    flag: 'r'
+  });
+
+  const database = JSON.parse(databaseString);
+
+  return await database.map(async person => {
+    const descriptions = [];
+    person.descriptors.map(descriptor => {
+      const float32Array = new Float32Array(descriptor);
+      descriptions.push(float32Array);
+    });
+    return new faceapi.LabeledFaceDescriptors(person.label, descriptions);
+  });
+}
 
 // Compare the faces
 const compareFace = async (image, labeledFaceDescriptors) => {

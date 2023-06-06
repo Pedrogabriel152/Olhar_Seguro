@@ -15,9 +15,6 @@ class FaceController {
         }
 
         return response.status(200).json({message: `Bem vinjdo ${result}`});
-
-        // return response.json('Olá')
-        
     }
 }
 
