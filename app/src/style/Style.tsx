@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import logoBack from '../img/fundo.svg'
-
+import logoBack from '../img/fundo.svg';
 
 export const Body = styled.body`
     color: rgb(var(--foreground-rgb));
