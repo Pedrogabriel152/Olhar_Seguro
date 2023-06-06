@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
-import { Buttons, Typography, Column } from "../style/Style"
+import { Link } from "react-router-dom";
+import { Buttons, Typography, Column } from "../style/Style";
 
 type StringProps = {
     labelButton: string
@@ -10,7 +10,7 @@ type StringProps = {
 const Button = ({labelButton, to, onclick}: StringProps) =>{
 
     const handleClick = () =>{
-       console.log("Iniciar") 
+       console.log("Iniciar");
     }
 
     return(
@@ -27,4 +27,4 @@ const Button = ({labelButton, to, onclick}: StringProps) =>{
     )
 }
 
-export default Button
+export default Button;

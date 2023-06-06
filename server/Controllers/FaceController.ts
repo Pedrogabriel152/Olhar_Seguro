@@ -3,10 +3,7 @@ import faceDetection from '../FaceAPI/faceDetection';
 
 class FaceController {  
     public static async compare(request:Request, response: Response) {
-        
-        // const image = request.file
-
-        console.log(request.file)
+        console.log(request.file);
 
         const result =  await faceDetection(request.file);
 

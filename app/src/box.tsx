@@ -6,7 +6,7 @@ import logo from './img/logo.svg';
 
 const HomeBox = (props: any) => {
 
-  const label = "Iniciar"
+  const label = "Iniciar";
 
   return (
     <div>

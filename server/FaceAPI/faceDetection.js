@@ -11,27 +11,12 @@ const faceDetection = async (imageReques) => {
 
     console.log(imageReques)
     const image = await loadImage(`${imageReques.path}`);
-    console.log(image)
+    console.log(image);
 
     if (!fs.existsSync(folderName)) {
-      fs.mkdirSync(folderName);
-      const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
-
-      const labeledFaceDescriptors =  await Promise.all(
-          labels.map(async (label) => {
-            return await loadFaceImages(label);
-          })
-      );
-      const database = JSON.stringify(labeledFaceDescriptors);
-      if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
-      }else{
-        fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
-      }
+      await writeDatabase();
     }
-    const labeledFaceDescriptors = await Promise.all(
-      await getDatabase()
-    );
+    const labeledFaceDescriptors = await Promise.all(await getDatabase());
     
     const results = await compareFace(image, labeledFaceDescriptors);
     console.log("***************************************************************************");
@@ -99,6 +84,25 @@ const loadFaceImages = async (label) => {
     }
 };
 
+const writeDatabase = async () => {
+  if (!fs.existsSync(folderName)) {
+    fs.mkdirSync(folderName);
+    const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
+
+    const labeledFaceDescriptors =  await Promise.all(
+        labels.map(async (label) => {
+          return await loadFaceImages(label);
+        })
+    );
+    const database = JSON.stringify(labeledFaceDescriptors);
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
+    }else{
+      fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
+    }
+  }
+}
+
 // Load Database
 const getDatabase = async () => {
   const databaseString = fs.readFileSync(`${folderName}/${filePath}`,{
@@ -127,8 +131,8 @@ const compareFace = async (image, labeledFaceDescriptors) => {
     }
 
     const detection = await detectFace(image);
-    console.log('[IMAGE COMPARE]', image)
-    console.log('[LABEL COMPARE]', labeledFaceDescriptors)
+    console.log('[IMAGE COMPARE]', image);
+    console.log('[LABEL COMPARE]', labeledFaceDescriptors);
 
     const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
    

@@ -1,7 +1,5 @@
-
 import styled from 'styled-components';
-import logoBack from '../img/fundo.svg'
-
+import logoBack from '../img/fundo.svg';
 
 export const Body = styled.body`
     color: rgb(var(--foreground-rgb));
@@ -9,16 +7,16 @@ export const Body = styled.body`
         to bottom,
         transparent,
         rgb(var(--background-end-rgb))
-        )
-        rgb(var(--background-start-rgb));
-        background-image: url('${logoBack}');
-        background-color: #0a89da;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        margin-top: 0px;
-        width: auto;
-        height: 100vh;
+    )
+    rgb(var(--background-start-rgb));
+    background-image: url('${logoBack}');
+    background-color: #0a89da;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 0px;
+    width: auto;
+    height: 100vh;
 `;
 
 export const Container = styled.div`
@@ -36,7 +34,6 @@ export const ContainerInterno = styled.div`
     svg{
         margin-top: 190px;
     }
-    
 `;
 
 export const Column = styled.div`
@@ -46,7 +43,7 @@ export const Column = styled.div`
 export const ExternalBox = styled.div`
     width: 650px;
     height: 500px;
-  `;
+`;
 
 export const InternalBox = styled.div`
     background-color: rgba( 255, 255, 240, 1);
@@ -125,6 +122,16 @@ export const AppVideo = styled.div`
 `;
 
 export const Canva = styled.div`
-    position: absolute;
+    position: fixed;
     top: 100px;
+`;
+
+
+export const Button2 = styled.button`
+    border: none;
+    height: 50px;
+    background-color:#f1eeee;
+    position: absolute;
+    top: 85%;
+    overflow: hidden;
 `;
