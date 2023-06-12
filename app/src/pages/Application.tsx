@@ -10,15 +10,16 @@ import '@tensorflow/tfjs';
 const Application = (props: any) =>{
     const [image, setImage] = useState<any>();
     const navigate = useNavigate();
+    const MODELS_URL = 'public/models';
 
     const videoRef: any = useRef(null);
     const canvasRef: any = useRef();
 
     useEffect(() => {
       const loadModels = async () => {
-        await faceapi.nets.ssdMobilenetv1.loadFromUri('/models'); // Carregue o modelo adequado
-        await faceapi.nets.faceLandmark68Net.loadFromUri('/models'); // Carregue o modelo adequado
-        await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
+        await faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URL); // Carregue o modelo adequado
+        await faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URL); // Carregue o modelo adequado
+        await faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URL);
       };
 
       loadModels();
