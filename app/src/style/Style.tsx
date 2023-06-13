@@ -149,7 +149,7 @@ export const Capturar = styled.button`
     padding: 0.25em 1em;
     cursor: pointer;
     position: fixed;
-    bottom: 27%;
+    bottom: 17%;
     z-index: 99;
     transition: 0.5s all ease-out;
     &:hover{

@@ -18,9 +18,10 @@ const Application = (props: any) =>{
 
     useEffect(() => {
       const loadModels = async () => {
-        await faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URL); // Carregue o modelo adequado
-        await faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URL); // Carregue o modelo adequado
-        await faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URL);
+        // await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
+        // await faceapi.nets.tinyFaceDetector.loadFromUri("/models")
+        // await faceapi.nets.faceLandmark68Net.loadFromUri("/models")
+        // await faceapi.nets.faceRecognitionNet.loadFromUri("/models")
       };
 
       loadModels();
@@ -34,6 +35,7 @@ const Application = (props: any) =>{
 
         // Detecte a face e envie a imagem para o backend
         await detectFaceAndSendImage(imageSrc);
+        
       }, [videoRef, setImage]);
     
       const detectFaceAndSendImage = async (imageData: any) => {
@@ -47,31 +49,29 @@ const Application = (props: any) =>{
             console.log('Formato de imagem não suportado. Por favor, selecione uma imagem JPEG.');
             return;
           }
-          // Carregue a imagem usando a biblioteca canvas
-          const img = new Image();
-          img.src = imageData;
+          // // Carregue a imagem usando a biblioteca canvas
+          // const img = new Image();
+          // img.src = imageData;
       
           // Aguarde o carregamento completo da imagem
-          await new Promise((resolve, reject) => {
-            img.onload = resolve;
-            img.onerror = reject;
-          });
+          // await new Promise((resolve, reject) => {
+          //   img.onload = resolve;
+          //   img.onerror = reject;
+          // });
       
           // Converta a imagem em um elemento canvas
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0, img.width, img.height);
+          // const canvas = document.createElement('canvas');
+          // canvas.width = img.width;
+          // canvas.height = img.height;
+          // const ctx = canvas.getContext('2d');
+          // ctx?.drawImage(img, 0, 0, img.width, img.height);
       
-          // Detecte a face na imagem
-          const detections = await faceapi.detectSingleFace(canvas)
-          .withFaceLandmarks()
-          .withFaceDescriptor();
+          // // Detecte a face na imagem
+          // const detections = await faceapi.detectSingleFace(canvas)
+          // .withFaceLandmarks()
+          // .withFaceDescriptor();
       
-          if (detections) {
-            await sendImageToAPI(file);
-          }
+          await sendImageToAPI(file);
         } catch (error) {
           console.error(error);
         }
