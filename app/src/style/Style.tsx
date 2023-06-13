@@ -135,3 +135,25 @@ export const Button2 = styled.button`
     top: 85%;
     overflow: hidden;
 `;
+
+export const Capturar = styled.button`
+    background: #0a89da;
+    font-size: 16px;
+    font-family:arial, roboto, helvetica;
+    font-weight: bold;
+    border-radius: 30px;
+    border: none;
+    width: 60px;
+    height: 50px;
+    margin-bottom: 60px;
+    padding: 0.25em 1em;
+    cursor: pointer;
+    position: fixed;
+    bottom: 27%;
+    z-index: 99;
+    transition: 0.5s all ease-out;
+    &:hover{
+        background-color: #1d79b3;
+        transition: 600ms;
+    }
+`;

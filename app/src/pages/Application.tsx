@@ -1,10 +1,11 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import * as faceapi from "face-api.js";
-import { Canva, AppApplication, CameraContainer, Button2 } from "../style/Style";
+import { Canva, AppApplication, CameraContainer, Button2, Capturar } from "../style/Style";
 import Button from "../services/button";
 import { useNavigate } from "react-router";
 import { api } from "../api/api";
 import Webcam from 'react-webcam';
+import { AiOutlineCamera } from 'react-icons/ai';
 import '@tensorflow/tfjs';
 
 const Application = (props: any) =>{
@@ -123,11 +124,9 @@ const Application = (props: any) =>{
           screenshotFormat="image/jpeg"
         />
         </CameraContainer>
-        <button onClick={captureAndSendImage} style={{ background: 'red'}}>Capturar</button>
+        <Capturar onClick={captureAndSendImage}><AiOutlineCamera size={26}/></Capturar>
         <Canva>
         <canvas ref={canvasRef} width={940} height={650}/>
-        
-        
         </Canva>
         <Button2>
         <Button labelButton="Voltar" to="/" onclick={handleOnClick}/>
