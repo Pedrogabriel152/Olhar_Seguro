@@ -1,47 +1,52 @@
-const faceapi = require('face-api.js');
+const { nets, env, detectSingleFace, withFaceLandmarks, withFaceDescriptor, FaceMatcher, LabeledFaceDescriptors } = require('face-api.js');
 const canvas = require('canvas');
 const fs = require('fs');
 const path = require('path');
 const MODEL_URL = 'Models/weights';
 const folderName = `Database`;
 const filePath = 'database.json';
+let modelsLoad = false;
 
 const faceDetection = async (imageReques) => {
+  if(!modelsLoad){
     await loadModels();
+    modelsLoad = true;
+  }
 
-    console.log(imageReques)
-    const image = await loadImage(`${imageReques.path}`);
-    console.log(image);
+  console.log(imageReques);
+  const image = await loadImage(`${imageReques.path}`);
+  console.log(image);
 
-    if (!fs.existsSync(folderName)) {
-      await writeDatabase();
-    }
-    const labeledFaceDescriptors = await Promise.all(await getDatabase());
-    
-    const results = await compareFace(image, labeledFaceDescriptors);
-    console.log("***************************************************************************");
-    console.log(results);
-    console.log("***************************************************************************");
+  if (!fs.existsSync(folderName)) {
+    await writeDatabase();
+  }
 
-    return results.label;
+  const labeledFaceDescriptors = await Promise.all(await getDatabase());
 
+  const results = await compareFace(image, labeledFaceDescriptors);
+  console.log("***************************************************************************");
+  console.log(results);
+  console.log("***************************************************************************");
+
+  return results.label;
 };
 
 // Load Models
-const loadModels = async () => {
-    const { Canvas, Image, ImageData } = canvas;
-    faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
+const loadModels = () => {
+  const { Canvas, Image, ImageData } = canvas;
+  env.monkeyPatch({ Canvas, Image, ImageData });
 
-    const models = [
-      faceapi.nets.tinyFaceDetector.loadFromDisk(MODEL_URL),
-      faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL),
-      faceapi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL),
-      faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL),
-      faceapi.nets.faceExpressionNet.loadFromDisk(MODEL_URL)
-    ];
+  const models = [
+    nets.tinyFaceDetector.loadFromDisk(MODEL_URL),
+    nets.ssdMobilenetv1.loadFromDisk(MODEL_URL),
+    nets.faceLandmark68Net.loadFromDisk(MODEL_URL),
+    nets.faceRecognitionNet.loadFromDisk(MODEL_URL),
+    nets.faceExpressionNet.loadFromDisk(MODEL_URL)
+  ];
 
-    return await Promise.all(models);
+  return Promise.all(models);
 };
+
 
 // Load Image
 const loadImage = async path => {
@@ -50,38 +55,36 @@ const loadImage = async path => {
 
 // Detect face the image
 const detectFace = async (image) => {
-    return await faceapi
-        .detectSingleFace(image)
+    return await detectSingleFace(image)
         .withFaceLandmarks()
         .withFaceDescriptor();
 };
 
 // Load the images
-const loadFaceImages = async (label) => {
-    const descriptions = [];
-    try {
-      for (let i = 1; i <= 5; i++) {
-        
-        const img = await loadImage(`images/${label}/${i}.jpg`);
-        console.log(img)
-        const detections = await faceapi.detectSingleFace(img)
+const loadFaceImages = async label => {
+  const descriptions = [];
+  try {
+    const loadImagePromises = Array.from({ length: 5 }, async (_, i) => {
+      const img = await loadImage(`images/${label}/${i + 1}.jpg`);
+      console.log(img);
+      const detections = await detectSingleFace(img)
         .withFaceLandmarks()
         .withFaceDescriptor();
-        if(detections){
-          descriptions.push(detections.descriptor);
-        }
+      if (detections) {
+        descriptions.push(detections.descriptor);
       }
-    } catch (error) {
-      console.log(error);
-    }
-    // return new faceapi.LabeledFaceDescriptors(label, descriptions);
-    if (descriptions.length > 0) {
-      // Create the labeled face descriptors
-      return new faceapi.LabeledFaceDescriptors(label, descriptions);
-    } else {
-      // Return null or handle the case when no descriptors were loaded
-      return null;
-    }
+    });
+
+    await Promise.all(loadImagePromises);
+  } catch (error) {
+    console.log(error);
+  }
+
+  if (descriptions.length > 0) {
+    return new LabeledFaceDescriptors(label, descriptions);
+  } else {
+    return null;
+  }
 };
 
 const writeDatabase = async () => {
@@ -89,19 +92,17 @@ const writeDatabase = async () => {
     fs.mkdirSync(folderName);
     const labels = ['Pedro Gabriel', 'Luis Fernando', 'Felipe Antonio'];
 
-    const labeledFaceDescriptors =  await Promise.all(
-        labels.map(async (label) => {
-          return await loadFaceImages(label);
-        })
+    const labeledFaceDescriptors = await Promise.all(
+      labels.map(async (label) => {
+        return await loadFaceImages(label);
+      })
     );
+
     const database = JSON.stringify(labeledFaceDescriptors);
-    if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
-    }else{
-      fs.writeFileSync(`Database/${filePath}`,database, err => console.log(err));
-    }
+    fs.writeFileSync(`Database/${filePath}`, database, (err) => console.log(err));
   }
-}
+};
+
 
 // Load Database
 const getDatabase = async () => {
@@ -118,7 +119,7 @@ const getDatabase = async () => {
       const float32Array = new Float32Array(descriptor);
       descriptions.push(float32Array);
     });
-    return new faceapi.LabeledFaceDescriptors(person.label, descriptions);
+    return new LabeledFaceDescriptors(person.label, descriptions);
   });
 }
 
@@ -134,7 +135,7 @@ const compareFace = async (image, labeledFaceDescriptors) => {
     console.log('[IMAGE COMPARE]', image);
     console.log('[LABEL COMPARE]', labeledFaceDescriptors);
 
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
+    const faceMatcher = new FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
    
     const results = faceMatcher.findBestMatch(detection.descriptor);
 
