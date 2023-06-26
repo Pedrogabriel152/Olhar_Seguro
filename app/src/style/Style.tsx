@@ -157,3 +157,27 @@ export const Capturar = styled.button`
         transition: 600ms;
     }
 `;
+
+export const Response = styled.div`
+    width: 600px;
+    height: 450px;
+    background-color: white;
+    border-radius: 100px;
+    overflow: hidden;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    z-index: 99;
+    transform: translate(-50%, -50%);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+    svg {
+        margin-top: 15%;
+        margin-left: 35%;
+    }
+
+    p {
+        font-size: 1.5em;
+        margin-left: 30%;
+    }
+`;

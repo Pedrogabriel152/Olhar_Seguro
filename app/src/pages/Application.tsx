@@ -1,32 +1,21 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import * as faceapi from "face-api.js";
-import { Canva, AppApplication, CameraContainer, Button2, Capturar } from "../style/Style";
+import { Canva, AppApplication, CameraContainer, Button2, Capturar, Response } from "../style/Style";
 import Button from "../services/button";
 import { useNavigate } from "react-router";
 import { api } from "../api/api";
 import Webcam from 'react-webcam';
-import { AiOutlineCamera } from 'react-icons/ai';
+import { AiOutlineCamera, AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 import '@tensorflow/tfjs';
 
 const Application = (props: any) =>{
     const [image, setImage] = useState<any>();
+    const [response, setResponse] = useState<any>();
     const navigate = useNavigate();
     const MODELS_URL = 'public/models';
 
     const videoRef: any = useRef(null);
     const canvasRef: any = useRef();
-
-    useEffect(() => {
-      const loadModels = async () => {
-        // await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
-        // await faceapi.nets.tinyFaceDetector.loadFromUri("/models")
-        // await faceapi.nets.faceLandmark68Net.loadFromUri("/models")
-        // await faceapi.nets.faceRecognitionNet.loadFromUri("/models")
-      };
-
-      loadModels();
-        
-      }, []);
 
       const captureAndSendImage = useCallback(async () => {
         const imageSrc = videoRef.current.getScreenshot();
@@ -49,27 +38,6 @@ const Application = (props: any) =>{
             console.log('Formato de imagem não suportado. Por favor, selecione uma imagem JPEG.');
             return;
           }
-          // // Carregue a imagem usando a biblioteca canvas
-          // const img = new Image();
-          // img.src = imageData;
-      
-          // Aguarde o carregamento completo da imagem
-          // await new Promise((resolve, reject) => {
-          //   img.onload = resolve;
-          //   img.onerror = reject;
-          // });
-      
-          // Converta a imagem em um elemento canvas
-          // const canvas = document.createElement('canvas');
-          // canvas.width = img.width;
-          // canvas.height = img.height;
-          // const ctx = canvas.getContext('2d');
-          // ctx?.drawImage(img, 0, 0, img.width, img.height);
-      
-          // // Detecte a face na imagem
-          // const detections = await faceapi.detectSingleFace(canvas)
-          // .withFaceLandmarks()
-          // .withFaceDescriptor();
       
           await sendImageToAPI(file);
         } catch (error) {
@@ -91,6 +59,8 @@ const Application = (props: any) =>{
     
           // Trate a resposta do backend aqui
           console.log('[RESPONSE API] -> ',response.data);
+
+          setResponse(response.data);
         } catch (error) {
           console.error(error);
         }
@@ -131,6 +101,15 @@ const Application = (props: any) =>{
         <Button2>
         <Button labelButton="Voltar" to="/" onclick={handleOnClick}/>
         </Button2>
+        {response &&
+          <Response>
+            {response.code == 200
+              ? <AiFillCheckCircle size={150} color="#028309"/>
+              : <AiFillCloseCircle size={150} color="#ff0505"/>
+            }
+            <p>{response.message}</p>
+          </Response>
+        }
         </AppApplication>
         </>
     )
