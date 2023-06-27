@@ -11,6 +11,7 @@ import '@tensorflow/tfjs';
 const Application = (props: any) =>{
     const [image, setImage] = useState<any>();
     const [response, setResponse] = useState<any>();
+    const [statusResponse, setStatusResponse] = useState<boolean>(false);
     const navigate = useNavigate();
     const MODELS_URL = 'public/models';
 
@@ -60,7 +61,12 @@ const Application = (props: any) =>{
           // Trate a resposta do backend aqui
           console.log('[RESPONSE API] -> ',response.data);
 
-          setResponse(response.data);
+          setResponse(response);
+          setStatusResponse(true);
+          setInterval(() => {
+            setStatusResponse(false);
+          }, 2000)
+          console.log(response)
         } catch (error) {
           console.error(error);
         }
@@ -101,13 +107,13 @@ const Application = (props: any) =>{
         <Button2>
         <Button labelButton="Voltar" to="/" onclick={handleOnClick}/>
         </Button2>
-        {response &&
+        {response && statusResponse &&
           <Response>
-            {response.code == 200
+            {response.status == 200
               ? <AiFillCheckCircle size={150} color="#028309"/>
               : <AiFillCloseCircle size={150} color="#ff0505"/>
             }
-            <p>{response.message}</p>
+            <p>{response.data.message}</p>
           </Response>
         }
         </AppApplication>
